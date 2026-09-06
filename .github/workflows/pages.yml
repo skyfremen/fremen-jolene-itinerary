@@ -1,4 +1,4 @@
-name: Deploy Beijing itinerary to GitHub Pages
+name: Deploy itinerary site to GitHub Pages
 
 on:
   push:
@@ -24,6 +24,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Generate deployment version
+        run: |
+          SHORT_SHA="${GITHUB_SHA::7}"
+          BUILT_AT="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > version.json <<EOF
+          {
+            "version": "${GITHUB_RUN_NUMBER}",
+            "run_number": "${GITHUB_RUN_NUMBER}",
+            "sha": "${SHORT_SHA}",
+            "built_at": "${BUILT_AT}"
+          }
+          EOF
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
