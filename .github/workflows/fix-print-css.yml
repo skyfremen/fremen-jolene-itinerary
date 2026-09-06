@@ -1,0 +1,24 @@
+name: Fix print CSS
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-print-css.yml'
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Fix print CSS typos
+        run: |
+          sed -i 's/paddin:/padding:/g' beijing-2026/index.html template/index.html
+      - name: Commit fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beijing-2026/index.html template/index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix print CSS padding"
+          git push
