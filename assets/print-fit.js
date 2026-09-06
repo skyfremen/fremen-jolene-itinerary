@@ -1,7 +1,7 @@
 (() => {
   const MM_TO_PX = 96 / 25.4;
   const PAGE_HEIGHT_PX = (297 - 20) * MM_TO_PX; // A4 minus 10mm top/bottom margins
-  const MAX_OVERFLOW_RATIO = 1.18;
+  const MAX_OVERFLOW_RATIO = 1.25;
 
   function clearFitClasses() {
     document.querySelectorAll('.day.print-fit-one-page').forEach(day => {
