@@ -1,0 +1,69 @@
+name: Fix back buttons
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-back-buttons.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix back button layout
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          paths = [Path('beijing-2026/index.html'), Path('template/index.html')]
+
+          new_css = '''
+    .back-row{width:min(1120px,calc(100% - 28px));margin:0 auto 10px}
+    .back-home{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;background:#151820;border:1px solid #2a2f3a;color:#cfeee9;text-decoration:none;font-size:.82rem;font-weight:800;transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease}
+    .back-home:hover,.back-home:focus{background:#173b37;border-color:#2f7068;color:#5eead4;transform:translateY(-1px)}
+    @media(max-width:760px){.back-row{margin-bottom:8px}.back-home{padding:7px 9px;font-size:.72rem}}
+    @media print{.back-row{display:none}}
+'''
+
+          for path in paths:
+              text = path.read_text(encoding='utf-8')
+
+              # Remove old back-button CSS block.
+              text = re.sub(
+                  r'\s*\.back-home\{position:absolute;.*?@media print\{\.back-home\{display:none\}\}\s*',
+                  '\n',
+                  text,
+                  flags=re.S,
+              )
+
+              # Remove any existing body-level back link.
+              text = re.sub(
+                  r'\s*<a class="back-home" href="\.\./" aria-label="Back to main itinerary page">← Back</a>\s*',
+                  '\n',
+                  text,
+              )
+
+              # Add the corrected CSS before </style>.
+              if '.back-row{' not in text:
+                  text = text.replace('</style>', new_css + '  </style>', 1)
+
+              # Insert the visible back row as the first content inside header.
+              back_markup = '<div class="back-row"><a class="back-home" href="../" aria-label="Back to main itinerary page">← Back to Itineraries</a></div>'
+              if back_markup not in text:
+                  text = text.replace('<header>', '<header>\n    ' + back_markup, 1)
+
+              path.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beijing-2026/index.html template/index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix back button layout on itinerary pages"
+          git push
