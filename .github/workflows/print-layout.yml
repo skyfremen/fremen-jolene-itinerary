@@ -1,0 +1,119 @@
+name: Print layout
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/print-layout.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Update print CSS
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          paths = [Path('beijing-2026/index.html'), Path('template/index.html')]
+          print_css = r'''
+    @page { size: A4; margin: 10mm; }
+    @media print {
+      html, body { background:#fff !important; color:#111 !important; }
+      body { padding:0 !important; font-size:10.5pt; }
+      nav, .print-btn, .back-row { display:none !important; }
+      .wrap, .back-row { width:100% !important; max-width:none !important; }
+
+      header {
+        padding:0 0 4mm !important;
+        page-break-after:avoid !important;
+        break-after:avoid-page !important;
+      }
+      .hero {
+        background:#fff !important;
+        color:#111 !important;
+        box-shadow:none !important;
+        border:1px solid #bbb !important;
+        border-radius:8px !important;
+        padding:5mm !important;
+      }
+      .hero:before, .hero:after { display:none !important; }
+      .eyebrow, .sub, .theme, .loc, .note, .info-card p, .flight small, footer { color:#444 !important; }
+      .pill, .tag, .date-chip, .summary, .event-card, .info-card, .emergency, .time {
+        background:#fff !important;
+        color:#111 !important;
+        box-shadow:none !important;
+        border-color:#bbb !important;
+      }
+      .day-index, .flight-no, .emergency span, .date-chip { color:#111 !important; }
+      .timeline:before { background:#aaa !important; }
+
+      main { padding:0 !important; }
+      .summary-grid { margin:0 0 4mm !important; gap:2mm !important; }
+      .summary { padding:2.5mm !important; border-radius:6px !important; }
+      .summary small { color:#555 !important; }
+      .summary strong { font-size:9.5pt !important; }
+
+      .day {
+        margin:0 !important;
+        padding:0 !important;
+        break-inside:avoid-page !important;
+        page-break-inside:avoid !important;
+      }
+      #day1 {
+        break-before:auto !important;
+        page-break-before:auto !important;
+      }
+      #day2, #day3, #day4, #day5 {
+        break-before:page !important;
+        page-break-before:always !important;
+      }
+      .day-head { margin-bottom:2.5mm !important; }
+      h1 { font-size:24pt !important; margin:.08em 0 !important; }
+      h2 { font-size:16pt !important; margin:0 !important; }
+      .theme { font-size:9pt !important; }
+      .date-chip { padding:1.5mm 2mm !important; font-size:8.5pt !important; }
+
+      .timeline { margin-left:0 !important; }
+      .event { grid-template-columns:22mm 1fr !important; gap:2.5mm !important; margin-bottom:2mm !important; break-inside:avoid !important; page-break-inside:avoid !important; }
+      .time { min-width:0 !important; padding:1.5mm 1mm !important; font-size:8pt !important; border-width:1px !important; border-radius:5px !important; }
+      .event-card { padding:2.5mm 3mm !important; border-radius:6px !important; break-inside:avoid !important; page-break-inside:avoid !important; }
+      .event-card h3 { font-size:10pt !important; margin:0 0 1mm !important; }
+      .loc, .note, .tag, .shops { font-size:8.5pt !important; }
+      .note { margin-top:1.5mm !important; padding-top:1.5mm !important; }
+
+      .info-section {
+        break-before:page !important;
+        page-break-before:always !important;
+        margin:0 !important;
+        break-inside:avoid-page !important;
+      }
+      .cards, .emergency-grid { gap:3mm !important; }
+      .info-card, .emergency, .flight { break-inside:avoid !important; page-break-inside:avoid !important; }
+      footer { padding:4mm 0 0 !important; border-top:1px solid #bbb !important; }
+
+      * { -webkit-print-color-adjust:economy !important; print-color-adjust:economy !important; }
+    }
+'''
+
+          for path in paths:
+              text = path.read_text(encoding='utf-8')
+              text = re.sub(r'\n\s*@page\s*\{.*?\}\s*@media print\s*\{.*?\}\s*(?=\n\s*</style>)', '\n', text, flags=re.S)
+              # Remove all existing print media blocks to avoid conflicts.
+              text = re.sub(r'\s*@media print\s*\{.*?\}\s*', '\n', text, flags=re.S)
+              text = text.replace('</style>', print_css + '\n  </style>', 1)
+              path.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit print layout
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beijing-2026/index.html template/index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Optimize itinerary printing by day"
+          git push
