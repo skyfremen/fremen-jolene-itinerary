@@ -43,7 +43,6 @@
         day.style.setProperty('--print-fit-scale', scale.toFixed(4));
         day.classList.add('print-fit-one-page');
 
-        // Re-check using the real scaled print layout and make one corrective pass.
         const scaledHeight = day.getBoundingClientRect().height;
         if (scaledHeight > available) {
           scale = Math.max(MIN_SCALE, scale * (available / scaledHeight) * 0.99);
@@ -61,9 +60,6 @@
     const root = document.documentElement;
     const previousVisibility = root.style.visibility;
 
-    // Apply the real print stylesheet briefly, while hidden, so measurements match
-    // the layout Chrome will paginate. Keep the resulting fit classes after restoring
-    // the normal screen stylesheet state.
     root.style.visibility = 'hidden';
     links.forEach(link => link.setAttribute('media', 'all'));
     void document.body.offsetHeight;
@@ -79,13 +75,26 @@
     root.style.visibility = previousVisibility;
   }
 
+  function bindPrintButtons() {
+    document.querySelectorAll('.print-btn').forEach(button => {
+      button.onclick = event => {
+        event.preventDefault();
+        preparePrintFit();
+        window.print();
+      };
+    });
+  }
+
   let resizeTimer;
   function schedulePrepare() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(preparePrintFit, 120);
   }
 
-  window.addEventListener('load', preparePrintFit);
+  window.addEventListener('load', () => {
+    bindPrintButtons();
+    preparePrintFit();
+  });
   window.addEventListener('beforeprint', preparePrintFit);
   window.addEventListener('resize', schedulePrepare, { passive: true });
   window.addEventListener('orientationchange', schedulePrepare, { passive: true });
@@ -94,6 +103,5 @@
     document.fonts.ready.then(preparePrintFit).catch(() => {});
   }
 
-  // Expose this so any custom print button can explicitly prepare first if needed.
   window.prepareItineraryPrintFit = preparePrintFit;
 })();
