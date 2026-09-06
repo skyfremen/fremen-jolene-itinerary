@@ -1,107 +1,51 @@
 (() => {
-  const MM_TO_PX = 96 / 25.4;
-  const PAGE_HEIGHT_PX = (297 - 20) * MM_TO_PX; // A4 minus 10mm top/bottom margins
-  const MAX_OVERFLOW_RATIO = 1.25;
-  const FIT_SAFETY = 0.965;
-  const MIN_SCALE = 0.80;
-
-  function getPrintStylesheets() {
-    return [...document.querySelectorAll('link[rel="stylesheet"]')]
-      .filter(link => (link.getAttribute('href') || '').includes('assets/print.css'));
-  }
-
-  function resetDay(day) {
-    day.classList.remove('print-fit-one-page');
-    day.style.removeProperty('--print-fit-scale');
-  }
-
-  function clearFitClasses() {
-    document.querySelectorAll('.day').forEach(resetDay);
-  }
-
-  function availableHeightFor(day) {
-    if (day.id !== 'day1') return PAGE_HEIGHT_PX;
-
-    const header = document.querySelector('header');
-    const summary = document.querySelector('.summary-grid');
-    const used = (header?.getBoundingClientRect().height || 0) +
-      (summary?.getBoundingClientRect().height || 0);
-
-    return Math.max(PAGE_HEIGHT_PX - used, PAGE_HEIGHT_PX * 0.45);
-  }
-
-  function calculateFitUsingActivePrintStyles() {
-    clearFitClasses();
-
+  /*
+   * Browser print pagination is not exposed reliably enough to measure exact
+   * A4 overflow before the print dialog. Use a deterministic content-density
+   * heuristic instead. Dense days get a stronger print-only compact layout;
+   * normal days remain unchanged.
+   */
+  function classifyDays() {
     document.querySelectorAll('.day').forEach(day => {
-      const available = availableHeightFor(day);
-      const height = day.getBoundingClientRect().height;
-      const ratio = height / available;
+      day.classList.remove('print-dense-one-page');
 
-      if (ratio > 1 && ratio <= MAX_OVERFLOW_RATIO) {
-        let scale = Math.max(MIN_SCALE, Math.min(0.995, (available / height) * FIT_SAFETY));
-        day.style.setProperty('--print-fit-scale', scale.toFixed(4));
-        day.classList.add('print-fit-one-page');
+      /* Day 1 shares the first sheet with the hero/summary, so do not force
+         dense-day fitting there. It may continue naturally to page 2. */
+      if (day.id === 'day1') return;
 
-        const scaledHeight = day.getBoundingClientRect().height;
-        if (scaledHeight > available) {
-          scale = Math.max(MIN_SCALE, scale * (available / scaledHeight) * 0.99);
-          day.style.setProperty('--print-fit-scale', scale.toFixed(4));
-        }
-      }
+      const text = (day.innerText || '').replace(/\s+/g, ' ').trim();
+      const chars = text.length;
+      const events = day.querySelectorAll('.event').length;
+      const longBlocks = [...day.querySelectorAll('.event-card, .note')]
+        .filter(el => (el.innerText || '').trim().length >= 220).length;
+
+      /* Tuned for itinerary pages: a text-heavy day such as Beijing Day 3
+         is compacted, while ordinary 4-6 event days keep normal sizing. */
+      const isDense =
+        chars >= 900 ||
+        (chars >= 700 && events >= 6) ||
+        (longBlocks >= 2 && chars >= 600);
+
+      if (isDense) day.classList.add('print-dense-one-page');
     });
-  }
-
-  function preparePrintFit() {
-    const links = getPrintStylesheets();
-    if (!links.length) return;
-
-    const previousMedia = links.map(link => link.getAttribute('media'));
-    const root = document.documentElement;
-    const previousVisibility = root.style.visibility;
-
-    root.style.visibility = 'hidden';
-    links.forEach(link => link.setAttribute('media', 'all'));
-    void document.body.offsetHeight;
-
-    calculateFitUsingActivePrintStyles();
-    void document.body.offsetHeight;
-
-    links.forEach((link, index) => {
-      const media = previousMedia[index];
-      if (media == null) link.removeAttribute('media');
-      else link.setAttribute('media', media);
-    });
-    root.style.visibility = previousVisibility;
   }
 
   function bindPrintButtons() {
     document.querySelectorAll('.print-btn').forEach(button => {
       button.onclick = event => {
         event.preventDefault();
-        preparePrintFit();
-        window.print();
+        classifyDays();
+        requestAnimationFrame(() => window.print());
       };
     });
   }
 
-  let resizeTimer;
-  function schedulePrepare() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(preparePrintFit, 120);
-  }
-
-  window.addEventListener('load', () => {
+  window.addEventListener('DOMContentLoaded', () => {
+    classifyDays();
     bindPrintButtons();
-    preparePrintFit();
   });
-  window.addEventListener('beforeprint', preparePrintFit);
-  window.addEventListener('resize', schedulePrepare, { passive: true });
-  window.addEventListener('orientationchange', schedulePrepare, { passive: true });
+  window.addEventListener('beforeprint', classifyDays);
+  window.addEventListener('pageshow', classifyDays);
 
-  if (document.fonts?.ready) {
-    document.fonts.ready.then(preparePrintFit).catch(() => {});
-  }
-
-  window.prepareItineraryPrintFit = preparePrintFit;
+  window.prepareItineraryPrintFit = classifyDays;
 })();
