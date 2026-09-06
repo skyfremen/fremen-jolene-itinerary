@@ -184,11 +184,70 @@
     padding: .6mm 1.2mm !important;
   }
 
-  /* For days up to 25% over a printable A4 page, JS calculates the exact scale needed.
-     Scaling the whole day changes the actual print layout footprint, which is more reliable
-     than only reducing individual font sizes/paddings. */
-  .day.print-fit-one-page {
-    zoom: var(--print-fit-scale, 1) !important;
+  /* Deterministic compact mode for text-heavy days. This avoids relying on
+     browser print-height measurements, which vary between print engines. */
+  .day.print-dense-one-page {
+    font-size: 8.5pt !important;
+    line-height: 1.18 !important;
+  }
+
+  .day.print-dense-one-page .day-head {
+    margin-bottom: 2.4mm !important;
+    padding-bottom: 1mm !important;
+  }
+
+  .day.print-dense-one-page h2 {
+    font-size: 1.75rem !important;
+    line-height: 1.02 !important;
+    margin: 1mm 0 !important;
+  }
+
+  .day.print-dense-one-page .theme,
+  .day.print-dense-one-page .date-chip,
+  .day.print-dense-one-page .day-index {
+    font-size: 8pt !important;
+  }
+
+  .day.print-dense-one-page .date-chip {
+    padding: 1.2mm 2mm !important;
+  }
+
+  .day.print-dense-one-page .event {
+    padding: 1.8mm 0 !important;
+    gap: 2.5mm !important;
+    grid-template-columns: 21mm 1fr !important;
+  }
+
+  .day.print-dense-one-page .time {
+    font-size: 7.8pt !important;
+    line-height: 1.05 !important;
+  }
+
+  .day.print-dense-one-page .event-card h3 {
+    margin-bottom: .4mm !important;
+    font-size: 9pt !important;
+    line-height: 1.12 !important;
+  }
+
+  .day.print-dense-one-page .loc,
+  .day.print-dense-one-page .note,
+  .day.print-dense-one-page .shops,
+  .day.print-dense-one-page .event-card {
+    font-size: 8.2pt !important;
+    line-height: 1.18 !important;
+  }
+
+  .day.print-dense-one-page .note {
+    margin-top: .6mm !important;
+  }
+
+  .day.print-dense-one-page .meta {
+    gap: 1.2mm !important;
+  }
+
+  .day.print-dense-one-page .tag {
+    font-size: 7.5pt !important;
+    padding: .25mm .8mm !important;
   }
 
   #travel {
