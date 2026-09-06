@@ -18,7 +18,9 @@
 
   nav,
   .print-btn,
-  .back-row {
+  .back-row,
+  .site-version,
+  .scroll-top-btn {
     display: none !important;
   }
 
@@ -182,36 +184,11 @@
     padding: .6mm 1.2mm !important;
   }
 
-  /* JS proportionally tightens days that are <=25% over one printable page. */
+  /* For days up to 25% over a printable A4 page, JS calculates the exact scale needed.
+     Scaling the whole day changes the actual print layout footprint, which is more reliable
+     than only reducing individual font sizes/paddings. */
   .day.print-fit-one-page {
-    font-size: var(--print-fit-font-size, 92%) !important;
-    line-height: var(--print-fit-line-height, 1.24) !important;
-  }
-
-  .day.print-fit-one-page .day-head {
-    margin-bottom: var(--print-fit-head-margin, 3.5mm) !important;
-    padding-bottom: var(--print-fit-head-padding, 1.5mm) !important;
-  }
-
-  .day.print-fit-one-page .event {
-    padding: var(--print-fit-event-padding, 2.4mm) 0 !important;
-    gap: var(--print-fit-event-gap, 3mm) !important;
-  }
-
-  .day.print-fit-one-page .time {
-    font-size: var(--print-fit-time-size, 8.3pt) !important;
-  }
-
-  .day.print-fit-one-page .event-card h3 {
-    margin-bottom: var(--print-fit-h3-margin, .6mm) !important;
-  }
-
-  .day.print-fit-one-page .note {
-    margin-top: var(--print-fit-note-margin, 1mm) !important;
-  }
-
-  .day.print-fit-one-page .tag {
-    padding: var(--print-fit-tag-y, .4mm) 1mm !important;
+    zoom: var(--print-fit-scale, 1) !important;
   }
 
   #travel {
