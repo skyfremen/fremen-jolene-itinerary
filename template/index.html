@@ -87,5 +87,6 @@
     function updateActive(){const offset=window.innerWidth<=760?window.innerHeight*.45:100;let current=targets[0];for(const section of targets){if(section.getBoundingClientRect().top<=offset)current=section}links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+current.id))}
     document.addEventListener('scroll',updateActive,{passive:true});window.addEventListener('resize',updateActive);updateActive();
   </script>
+  <script src="../assets/print-fit.js"></script>
 </body>
 </html>
