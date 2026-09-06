@@ -123,13 +123,17 @@
       .mobile-nav, .day-nav, nav {bottom: calc(env(safe-area-inset-bottom, 0px) + 48px) !important;}
       body {padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 150px) !important;}
     }
-  
-    .back-home{position:absolute;top:16px;left:16px;z-index:20;display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;background:rgba(10,20,20,.46);border:1px solid rgba(255,255,255,.2);color:#ecfffb;text-decoration:none;font-size:.82rem;font-weight:800;backdrop-filter:blur(10px);transition:background .18s ease,border-color .18s ease,transform .18s ease}.back-home:hover,.back-home:focus{background:rgba(15,74,68,.78);border-color:rgba(94,234,212,.55);transform:translateY(-1px)}@media(max-width:760px){.back-home{top:9px;left:9px;padding:6px 8px;font-size:.7rem}}@media print{.back-home{display:none}}
+
+    .back-row{width:min(1120px,calc(100% - 28px));margin:0 auto 10px}
+    .back-home{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;background:#151820;border:1px solid #2a2f3a;color:#cfeee9;text-decoration:none;font-size:.82rem;font-weight:800;transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease}
+    .back-home:hover,.back-home:focus{background:#173b37;border-color:#2f7068;color:#5eead4;transform:translateY(-1px)}
+    @media(max-width:760px){.back-row{margin-bottom:8px}.back-home{padding:7px 9px;font-size:.72rem}}
+    @media print{.back-row{display:none}}
   </style>
 </head>
 <body>
-  <a class="back-home" href="../" aria-label="Back to main itinerary page">← Back</a>
-  <header>
+<header>
+    <div class="back-row"><a class="back-home" href="../" aria-label="Back to main itinerary page">← Back to Itineraries</a></div>
     <div class="wrap hero">
       <div class="eyebrow">Travel Plan · 20–24 September 2026</div>
       <h1>Beijing <span class="zh-title">北京</span></h1>
