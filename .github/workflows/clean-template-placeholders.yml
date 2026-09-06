@@ -1,0 +1,67 @@
+name: Clean template placeholders
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/clean-template-placeholders.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove lorem ipsum from template
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('template/index.html')
+          text = path.read_text(encoding='utf-8')
+
+          # Hero description: keep a concise, obvious placeholder.
+          text = re.sub(
+              r'<div class="sub">Lorem ipsum.*?main highlights\.</div>',
+              '<div class="sub">[Short trip description / main highlights]</div>',
+              text,
+              flags=re.S,
+          )
+
+          # Any activity note whose content is only lorem ipsum becomes a simple notes placeholder.
+          text = re.sub(
+              r'<div class="note">Lorem ipsum.*?</div>',
+              '<div class="note">[Notes]</div>',
+              text,
+              flags=re.S,
+          )
+
+          # Replace remaining lorem ipsum inside paragraph-style information blocks.
+          text = re.sub(
+              r'(<strong>Notes:</strong>)\s*Lorem ipsum[^<]*',
+              r'\1 [Transport notes]',
+              text,
+          )
+          text = re.sub(
+              r'<p>Lorem ipsum.*?</p>',
+              '<p>[Hotel notes]</p>',
+              text,
+              flags=re.S,
+          )
+
+          # Safety net: no lorem ipsum should remain anywhere in the template.
+          text = re.sub(r'Lorem ipsum[^<]*', '', text, flags=re.I)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit cleaned template
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add template/index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Remove lorem ipsum from base itinerary template"
+          git push
