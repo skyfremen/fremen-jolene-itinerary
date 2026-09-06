@@ -22,6 +22,7 @@ jobs:
           replacements = {
               '#ff6b70': '#2dd4bf',
               '#ff8a72': '#5eead4',
+              '#ff8b8f': '#5eead4',
               'rgba(255,107,112,.16)': 'rgba(45,212,191,.16)',
               'rgba(255,107,112,.14)': 'rgba(45,212,191,.14)',
               '#65171d': '#123f3c',
@@ -34,7 +35,7 @@ jobs:
               '#5a3b40': '#2f7068',
           }
 
-          for path in [Path('index.html'), Path('beijing-2026/index.html')]:
+          for path in [Path('index.html'), Path('beijing-2026/index.html'), Path('template/index.html')]:
               text = path.read_text(encoding='utf-8')
               for old, new in replacements.items():
                   text = text.replace(old, new)
@@ -55,7 +56,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html beijing-2026/index.html
+          git add index.html beijing-2026/index.html template/index.html
           git diff --cached --quiet && exit 0
-          git commit -m "Switch itinerary site to teal theme"
+          git commit -m "Finish teal palette cleanup"
           git push
