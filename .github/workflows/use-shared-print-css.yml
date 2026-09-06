@@ -1,0 +1,45 @@
+name: Use shared print CSS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/use-shared-print-css.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Link shared print stylesheet
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          for path in [Path('beijing-2026/index.html'), Path('template/index.html')]:
+              text = path.read_text(encoding='utf-8')
+
+              marker = '/* PRINT-A4-DAY-PAGES */'
+              if marker in text:
+                  before, rest = text.split(marker, 1)
+                  end_style = rest.find('</style>')
+                  if end_style != -1:
+                      text = before + '</style>' + rest[end_style + len('</style>'):]
+
+              link = '<link rel="stylesheet" href="../assets/print.css" media="print">'
+              if link not in text:
+                  text = text.replace('</style>', '</style>\n  ' + link, 1)
+
+              path.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit page updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add beijing-2026/index.html template/index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Use shared print stylesheet across itineraries"
+          git push
