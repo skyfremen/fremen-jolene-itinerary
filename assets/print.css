@@ -184,70 +184,136 @@
     padding: .6mm 1.2mm !important;
   }
 
-  /* Deterministic compact mode for text-heavy days. This avoids relying on
-     browser print-height measurements, which vary between print engines. */
+  /* Moderate deterministic compact mode. */
   .day.print-dense-one-page {
-    font-size: 8.5pt !important;
-    line-height: 1.18 !important;
+    font-size: 8.4pt !important;
+    line-height: 1.16 !important;
   }
 
   .day.print-dense-one-page .day-head {
-    margin-bottom: 2.4mm !important;
-    padding-bottom: 1mm !important;
+    margin-bottom: 2.2mm !important;
+    padding-bottom: .8mm !important;
   }
 
   .day.print-dense-one-page h2 {
-    font-size: 1.75rem !important;
-    line-height: 1.02 !important;
-    margin: 1mm 0 !important;
+    font-size: 16pt !important;
+    line-height: 1 !important;
+    margin: .8mm 0 !important;
   }
 
   .day.print-dense-one-page .theme,
   .day.print-dense-one-page .date-chip,
   .day.print-dense-one-page .day-index {
-    font-size: 8pt !important;
+    font-size: 7.8pt !important;
   }
 
   .day.print-dense-one-page .date-chip {
-    padding: 1.2mm 2mm !important;
+    padding: 1mm 1.8mm !important;
   }
 
   .day.print-dense-one-page .event {
-    padding: 1.8mm 0 !important;
-    gap: 2.5mm !important;
-    grid-template-columns: 21mm 1fr !important;
+    padding: 1.5mm 0 !important;
+    gap: 2.2mm !important;
+    grid-template-columns: 20mm 1fr !important;
   }
 
   .day.print-dense-one-page .time {
-    font-size: 7.8pt !important;
-    line-height: 1.05 !important;
+    font-size: 7.5pt !important;
+    line-height: 1.02 !important;
   }
 
   .day.print-dense-one-page .event-card h3 {
-    margin-bottom: .4mm !important;
-    font-size: 9pt !important;
-    line-height: 1.12 !important;
+    margin-bottom: .3mm !important;
+    font-size: 8.8pt !important;
+    line-height: 1.08 !important;
   }
 
   .day.print-dense-one-page .loc,
   .day.print-dense-one-page .note,
   .day.print-dense-one-page .shops,
   .day.print-dense-one-page .event-card {
-    font-size: 8.2pt !important;
-    line-height: 1.18 !important;
+    font-size: 8pt !important;
+    line-height: 1.14 !important;
   }
 
   .day.print-dense-one-page .note {
-    margin-top: .6mm !important;
+    margin-top: .5mm !important;
   }
 
   .day.print-dense-one-page .meta {
-    gap: 1.2mm !important;
+    gap: 1mm !important;
   }
 
   .day.print-dense-one-page .tag {
-    font-size: 7.5pt !important;
-    padding: .25mm .8mm !important;
+    font-size: 7.2pt !important;
+    padding: .2mm .7mm !important;
+  }
+
+  /* Strong deterministic mode for very text-heavy days, tuned for iOS Safari. */
+  .day.print-very-dense-one-page {
+    font-size: 7.6pt !important;
+    line-height: 1.08 !important;
+  }
+
+  .day.print-very-dense-one-page .day-head {
+    margin-bottom: 1.4mm !important;
+    padding-bottom: .5mm !important;
+  }
+
+  .day.print-very-dense-one-page h2 {
+    font-size: 14.5pt !important;
+    line-height: .98 !important;
+    margin: .4mm 0 !important;
+  }
+
+  .day.print-very-dense-one-page .theme,
+  .day.print-very-dense-one-page .date-chip,
+  .day.print-very-dense-one-page .day-index {
+    font-size: 7pt !important;
+    line-height: 1.05 !important;
+  }
+
+  .day.print-very-dense-one-page .date-chip {
+    padding: .7mm 1.4mm !important;
+  }
+
+  .day.print-very-dense-one-page .event {
+    padding: .85mm 0 !important;
+    gap: 1.6mm !important;
+    grid-template-columns: 18mm 1fr !important;
+  }
+
+  .day.print-very-dense-one-page .time {
+    font-size: 6.8pt !important;
+    line-height: 1 !important;
+  }
+
+  .day.print-very-dense-one-page .event-card h3 {
+    margin-bottom: .15mm !important;
+    font-size: 8.1pt !important;
+    line-height: 1.04 !important;
+  }
+
+  .day.print-very-dense-one-page .loc,
+  .day.print-very-dense-one-page .note,
+  .day.print-very-dense-one-page .shops,
+  .day.print-very-dense-one-page .event-card {
+    font-size: 7.35pt !important;
+    line-height: 1.08 !important;
+  }
+
+  .day.print-very-dense-one-page .note {
+    margin-top: .3mm !important;
+  }
+
+  .day.print-very-dense-one-page .meta {
+    gap: .7mm !important;
+  }
+
+  .day.print-very-dense-one-page .tag {
+    font-size: 6.6pt !important;
+    line-height: 1 !important;
+    padding: .1mm .55mm !important;
   }
 
   #travel {
