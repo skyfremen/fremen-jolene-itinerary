@@ -123,9 +123,12 @@
       .mobile-nav, .day-nav, nav {bottom: calc(env(safe-area-inset-bottom, 0px) + 48px) !important;}
       body {padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 150px) !important;}
     }
+  
+    .back-home{position:absolute;top:16px;left:16px;z-index:20;display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;background:rgba(10,20,20,.46);border:1px solid rgba(255,255,255,.2);color:#ecfffb;text-decoration:none;font-size:.82rem;font-weight:800;backdrop-filter:blur(10px);transition:background .18s ease,border-color .18s ease,transform .18s ease}.back-home:hover,.back-home:focus{background:rgba(15,74,68,.78);border-color:rgba(94,234,212,.55);transform:translateY(-1px)}@media(max-width:760px){.back-home{top:9px;left:9px;padding:6px 8px;font-size:.7rem}}@media print{.back-home{display:none}}
   </style>
 </head>
 <body>
+  <a class="back-home" href="../" aria-label="Back to main itinerary page">← Back</a>
   <header>
     <div class="wrap hero">
       <div class="eyebrow">Travel Plan · 20–24 September 2026</div>
