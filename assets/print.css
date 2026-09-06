@@ -1,6 +1,6 @@
 @page {
   size: A4;
-  margin: 8mm;
+  margin: 10mm;
 }
 
 @media print {
@@ -12,8 +12,8 @@
 
   body {
     padding: 0 !important;
-    font-size: 9pt !important;
-    line-height: 1.25 !important;
+    font-size: 10pt !important;
+    line-height: 1.35 !important;
   }
 
   nav,
@@ -27,21 +27,19 @@
     max-width: none !important;
   }
 
-  /* Page 1: compact hero + summary + Day 1 */
   header {
-    padding: 0 0 2.5mm !important;
+    padding: 0 0 5mm !important;
     margin: 0 !important;
-    break-after: avoid-page !important;
-    page-break-after: avoid !important;
   }
 
   .hero {
     background: #fff !important;
     color: #111 !important;
     box-shadow: none !important;
-    border: 1px solid #bbb !important;
-    border-radius: 5px !important;
-    padding: 3mm 4mm !important;
+    border: 0 !important;
+    border-bottom: 2px solid #222 !important;
+    border-radius: 0 !important;
+    padding: 0 0 4mm !important;
   }
 
   .hero::before,
@@ -49,30 +47,36 @@
     display: none !important;
   }
 
-  .eyebrow {
-    font-size: 7pt !important;
-    letter-spacing: .08em !important;
+  .eyebrow,
+  .sub,
+  .theme,
+  .loc,
+  .note,
+  .info-card p,
+  .flight small,
+  footer {
+    color: #444 !important;
   }
 
-  h1 {
-    font-size: 20pt !important;
-    line-height: 1 !important;
-    margin: 1mm 0 !important;
+  .pill,
+  .tag,
+  .date-chip,
+  .summary,
+  .info-card,
+  .emergency,
+  .time,
+  .section-title .icon {
+    background: #fff !important;
+    color: #111 !important;
+    box-shadow: none !important;
+    border-color: #bbb !important;
   }
 
-  .sub {
-    font-size: 8pt !important;
-    line-height: 1.2 !important;
-  }
-
-  .hero-meta {
-    gap: 1.5mm !important;
-    margin-top: 2mm !important;
-  }
-
-  .pill {
-    padding: 1mm 1.5mm !important;
-    font-size: 7pt !important;
+  .day-index,
+  .flight-no,
+  .emergency span,
+  .date-chip {
+    color: #111 !important;
   }
 
   main {
@@ -80,36 +84,21 @@
   }
 
   .summary-grid {
-    margin: 0 0 2.5mm !important;
-    gap: 1.5mm !important;
+    margin: 0 0 7mm !important;
+    gap: 3mm !important;
   }
 
   .summary {
-    padding: 1.8mm 2mm !important;
-    border-radius: 4px !important;
-  }
-
-  .summary small {
-    font-size: 7pt !important;
-    color: #555 !important;
-  }
-
-  .summary strong {
-    font-size: 8pt !important;
-    line-height: 1.15 !important;
-    margin-top: .5mm !important;
+    padding: 3mm !important;
+    border-radius: 0 !important;
+    border-width: 0 0 1px !important;
   }
 
   .day {
     margin: 0 !important;
     padding: 0 !important;
-    break-inside: avoid-page !important;
-    page-break-inside: avoid !important;
-  }
-
-  #day1 {
-    break-before: auto !important;
-    page-break-before: auto !important;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
   }
 
   #day2,
@@ -130,28 +119,9 @@
   }
 
   .day-head {
-    margin-bottom: 1.5mm !important;
-    gap: 2mm !important;
-  }
-
-  .day-index {
-    font-size: 7pt !important;
-  }
-
-  h2 {
-    font-size: 14pt !important;
-    line-height: 1.05 !important;
-    margin: 0 !important;
-  }
-
-  .theme {
-    font-size: 8pt !important;
-    line-height: 1.15 !important;
-  }
-
-  .date-chip {
-    padding: 1mm 1.5mm !important;
-    font-size: 7.5pt !important;
+    margin-bottom: 5mm !important;
+    padding-bottom: 2mm !important;
+    border-bottom: 1px solid #aaa !important;
   }
 
   .timeline {
@@ -159,117 +129,101 @@
   }
 
   .timeline::before {
-    background: #aaa !important;
+    display: none !important;
   }
 
+  /* Print activities as clean rows instead of boxed cards. */
   .event {
-    grid-template-columns: 19mm 1fr !important;
-    gap: 2mm !important;
-    margin-bottom: 1.3mm !important;
+    display: grid !important;
+    grid-template-columns: 24mm 1fr !important;
+    gap: 4mm !important;
+    margin: 0 !important;
+    padding: 3.2mm 0 !important;
+    border-bottom: 1px solid #d6d6d6 !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
   .time {
     min-width: 0 !important;
-    padding: 1mm .8mm !important;
-    font-size: 7pt !important;
-    line-height: 1.05 !important;
-    border-width: 1px !important;
-    border-radius: 4px !important;
-  }
-
-  .event-card {
-    padding: 1.7mm 2.2mm !important;
-    border-radius: 4px !important;
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .event-card h3 {
+    align-self: start !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    text-align: left !important;
     font-size: 9pt !important;
-    line-height: 1.1 !important;
-    margin: 0 0 .6mm !important;
-  }
-
-  .loc,
-  .note,
-  .tag,
-  .shops {
-    font-size: 7.2pt !important;
+    font-weight: 800 !important;
     line-height: 1.15 !important;
   }
 
-  .meta {
-    gap: 1mm !important;
-  }
-
-  .tag {
-    padding: .7mm 1.2mm !important;
-  }
-
-  .note {
-    margin-top: 1mm !important;
-    padding-top: 1mm !important;
-  }
-
-  /* Ink-saving: remove all dark fills and coloured accents. */
-  .pill,
-  .tag,
-  .date-chip,
-  .summary,
-  .event-card,
-  .info-card,
-  .emergency,
-  .time,
-  .section-title .icon {
-    background: #fff !important;
+  .event-card {
+    background: transparent !important;
     color: #111 !important;
     box-shadow: none !important;
-    border-color: #bbb !important;
-  }
-
-  .eyebrow,
-  .sub,
-  .theme,
-  .loc,
-  .note,
-  .info-card p,
-  .flight small,
-  footer {
-    color: #444 !important;
-  }
-
-  .day-index,
-  .flight-no,
-  .emergency span,
-  .date-chip {
-    color: #111 !important;
-  }
-
-  /* Travel / Hotel / Emergency continue naturally after the itinerary. */
-  .info-section {
-    margin: 6mm 0 0 !important;
-    break-before: auto !important;
-    page-break-before: auto !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
     break-inside: auto !important;
     page-break-inside: auto !important;
   }
 
+  .event-card h3 {
+    margin: 0 0 1mm !important;
+  }
+
+  .note {
+    border-top: 0 !important;
+    margin-top: 1.5mm !important;
+    padding-top: 0 !important;
+  }
+
+  .tag {
+    border: 1px solid #bbb !important;
+    border-radius: 2px !important;
+    padding: .6mm 1.2mm !important;
+  }
+
+  /* Travel starts on a fresh page after the final itinerary day. */
+  #travel {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+
+  /* Remaining information sections flow naturally after Travel. */
+  .info-section {
+    margin: 7mm 0 0 !important;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  .section-title {
+    padding-bottom: 2mm !important;
+    border-bottom: 1px solid #aaa !important;
+    margin-bottom: 4mm !important;
+  }
+
   .cards,
   .emergency-grid {
-    gap: 2mm !important;
+    display: block !important;
   }
 
   .info-card,
-  .emergency,
+  .emergency {
+    border: 0 !important;
+    border-bottom: 1px solid #d6d6d6 !important;
+    border-radius: 0 !important;
+    padding: 3mm 0 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
   .flight {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
   footer {
-    padding: 3mm 0 0 !important;
+    padding: 5mm 0 0 !important;
     border-top: 1px solid #bbb !important;
   }
 
