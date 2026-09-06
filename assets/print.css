@@ -132,7 +132,6 @@
     display: none !important;
   }
 
-  /* Print activities as clean rows instead of boxed cards. */
   .event {
     display: grid !important;
     grid-template-columns: 24mm 1fr !important;
@@ -183,51 +182,48 @@
     padding: .6mm 1.2mm !important;
   }
 
-  /* If JS marks a day as only slightly too tall (<=12%), tighten it modestly. */
+  /* JS proportionally tightens days that are <=25% over one printable page. */
   .day.print-fit-one-page {
-    font-size: 92% !important;
-    line-height: 1.24 !important;
+    font-size: var(--print-fit-font-size, 92%) !important;
+    line-height: var(--print-fit-line-height, 1.24) !important;
   }
 
   .day.print-fit-one-page .day-head {
-    margin-bottom: 3.5mm !important;
-    padding-bottom: 1.5mm !important;
+    margin-bottom: var(--print-fit-head-margin, 3.5mm) !important;
+    padding-bottom: var(--print-fit-head-padding, 1.5mm) !important;
   }
 
   .day.print-fit-one-page .event {
-    padding: 2.4mm 0 !important;
-    gap: 3mm !important;
+    padding: var(--print-fit-event-padding, 2.4mm) 0 !important;
+    gap: var(--print-fit-event-gap, 3mm) !important;
   }
 
   .day.print-fit-one-page .time {
-    font-size: 8.3pt !important;
+    font-size: var(--print-fit-time-size, 8.3pt) !important;
   }
 
   .day.print-fit-one-page .event-card h3 {
-    margin-bottom: .6mm !important;
+    margin-bottom: var(--print-fit-h3-margin, .6mm) !important;
   }
 
   .day.print-fit-one-page .note {
-    margin-top: 1mm !important;
+    margin-top: var(--print-fit-note-margin, 1mm) !important;
   }
 
   .day.print-fit-one-page .tag {
-    padding: .4mm 1mm !important;
+    padding: var(--print-fit-tag-y, .4mm) 1mm !important;
   }
 
-  /* Travel starts on a fresh page after the final itinerary day. */
   #travel {
     break-before: page !important;
     page-break-before: always !important;
   }
 
-  /* Useful Numbers / Emergency also starts on a fresh page. */
   #emergency {
     break-before: page !important;
     page-break-before: always !important;
   }
 
-  /* Other information sections flow naturally. */
   .info-section {
     margin: 7mm 0 0 !important;
     break-inside: auto !important;
