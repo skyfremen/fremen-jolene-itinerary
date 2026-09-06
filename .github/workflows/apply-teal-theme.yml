@@ -1,0 +1,61 @@
+name: Apply teal theme
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-teal-theme.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply teal palette and template link
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              '#ff6b70': '#2dd4bf',
+              '#ff8a72': '#5eead4',
+              'rgba(255,107,112,.16)': 'rgba(45,212,191,.16)',
+              'rgba(255,107,112,.14)': 'rgba(45,212,191,.14)',
+              '#65171d': '#123f3c',
+              '#9c262d': '#17605a',
+              '#7c4930': '#244c52',
+              '#271a1d': '#112d2a',
+              '#583238': '#285c56',
+              '#351c20': '#173b37',
+              '#2a1d20': '#132b29',
+              '#5a3b40': '#2f7068',
+          }
+
+          for path in [Path('index.html'), Path('beijing-2026/index.html')]:
+              text = path.read_text(encoding='utf-8')
+              for old, new in replacements.items():
+                  text = text.replace(old, new)
+              path.write_text(text, encoding='utf-8')
+
+          hub = Path('index.html')
+          text = hub.read_text(encoding='utf-8')
+          if '.template-link{' not in text:
+              text = text.replace(
+                  '</style>',
+                  '.template-link{position:fixed;right:11px;bottom:9px;z-index:20;font-size:.66rem;color:#6d8581;opacity:.28;text-decoration:none;letter-spacing:.02em;transition:opacity .18s ease}.template-link:hover,.template-link:focus{opacity:.9;color:#5eead4}@media(max-width:700px){.template-link{right:8px;bottom:7px;font-size:.62rem;opacity:.22}}\n  </style>'
+              )
+          if 'href="./template/"' not in text:
+              text = text.replace('</body>', '  <a class="template-link" href="./template/" aria-label="Open itinerary base template">Template</a>\n</body>')
+          hub.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit theme update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html beijing-2026/index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Switch itinerary site to teal theme"
+          git push
