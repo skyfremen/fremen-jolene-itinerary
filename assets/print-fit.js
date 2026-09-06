@@ -1,16 +1,15 @@
 (() => {
   /*
-   * Browser print pagination is not exposed reliably enough to measure exact
-   * A4 overflow before the print dialog. Use a deterministic content-density
-   * heuristic instead. Dense days get a stronger print-only compact layout;
-   * normal days remain unchanged.
+   * iOS Safari does not expose reliable print pagination measurements.
+   * Classify itinerary days by content density as soon as the page loads.
+   * The shared print stylesheet then applies deterministic compact layouts.
    */
   function classifyDays() {
     document.querySelectorAll('.day').forEach(day => {
-      day.classList.remove('print-dense-one-page');
+      day.classList.remove('print-dense-one-page', 'print-very-dense-one-page');
 
-      /* Day 1 shares the first sheet with the hero/summary, so do not force
-         dense-day fitting there. It may continue naturally to page 2. */
+      /* Day 1 shares the first sheet with the hero/summary and may flow
+         naturally if it needs more room. */
       if (day.id === 'day1') return;
 
       const text = (day.innerText || '').replace(/\s+/g, ' ').trim();
@@ -19,32 +18,28 @@
       const longBlocks = [...day.querySelectorAll('.event-card, .note')]
         .filter(el => (el.innerText || '').trim().length >= 220).length;
 
-      /* Tuned for itinerary pages: a text-heavy day such as Beijing Day 3
-         is compacted, while ordinary 4-6 event days keep normal sizing. */
+      const isVeryDense =
+        chars >= 1200 ||
+        (chars >= 950 && longBlocks >= 2) ||
+        (chars >= 900 && events >= 7);
+
       const isDense =
-        chars >= 900 ||
-        (chars >= 700 && events >= 6) ||
-        (longBlocks >= 2 && chars >= 600);
+        chars >= 800 ||
+        (chars >= 650 && events >= 6) ||
+        (longBlocks >= 2 && chars >= 550);
 
-      if (isDense) day.classList.add('print-dense-one-page');
+      if (isVeryDense) day.classList.add('print-very-dense-one-page');
+      else if (isDense) day.classList.add('print-dense-one-page');
     });
   }
 
-  function bindPrintButtons() {
-    document.querySelectorAll('.print-btn').forEach(button => {
-      button.onclick = event => {
-        event.preventDefault();
-        classifyDays();
-        requestAnimationFrame(() => window.print());
-      };
-    });
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', classifyDays, { once: true });
+  } else {
     classifyDays();
-    bindPrintButtons();
-  });
-  window.addEventListener('beforeprint', classifyDays);
+  }
+
+  /* pageshow also covers Safari back/forward cache restores. */
   window.addEventListener('pageshow', classifyDays);
 
   window.prepareItineraryPrintFit = classifyDays;
