@@ -17,16 +17,21 @@
     main{padding:18px 0 70px}
     .section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}
     h2{margin:0;font-size:1.35rem}.count{color:var(--muted);font-size:.9rem}
-    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .trip-section{margin-bottom:28px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .past-trips{margin-top:30px;border:1px solid var(--line);border-radius:22px;background:rgba(21,24,32,.7);overflow:hidden}
+    .past-trips summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;cursor:pointer;font-weight:850;color:#d6d9df;user-select:none}
+    .past-trips summary::-webkit-details-marker{display:none}.past-trips summary:after{content:"⌄";font-size:1.2rem;color:var(--accent2);transition:transform .18s ease}.past-trips[open] summary:after{transform:rotate(180deg)}
+    .past-trips .grid{padding:0 20px 20px}.past-label{display:flex;align-items:center;gap:9px}.past-count{color:var(--muted);font-size:.82rem;font-weight:700}
     .trip{display:block;text-decoration:none;color:inherit;background:linear-gradient(145deg,#171b24,#13161d);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow);transition:transform .18s ease,border-color .18s ease}
     .trip:hover{transform:translateY(-3px);border-color:#2f7068}
+    .trip.next-trip{border-color:#2f7068;box-shadow:0 18px 50px rgba(0,0,0,.28),0 0 0 1px rgba(45,212,191,.08)}
     .trip-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
     .place{font-size:1.7rem;font-weight:900;letter-spacing:-.035em}.year{color:var(--accent2);font-weight:900}
     .dates{color:var(--muted);margin-top:7px}.desc{margin:20px 0;color:#d0d3d9;line-height:1.5}
     .meta{display:flex;gap:8px;flex-wrap:wrap}.pill{padding:7px 10px;border-radius:999px;background:#242933;color:#c8ccd4;font-size:.8rem;font-weight:750}
     .open{margin-top:22px;display:flex;align-items:center;justify-content:space-between;color:var(--accent2);font-weight:850}.arrow{font-size:1.3rem}
     footer{border-top:1px solid var(--line);padding:24px 0 36px;color:var(--muted);font-size:.84rem}
-    @media(max-width:700px){header{padding:42px 0 22px}.grid{grid-template-columns:1fr}.trip{border-radius:20px;padding:20px}h1{font-size:2.65rem}.sub{font-size:.96rem}}
+    @media(max-width:700px){header{padding:42px 0 22px}.grid{grid-template-columns:1fr}.trip{border-radius:20px;padding:20px}h1{font-size:2.65rem}.sub{font-size:.96rem}.past-trips summary{padding:15px 16px}.past-trips .grid{padding:0 16px 16px}}
     .template-link{position:fixed;right:11px;bottom:9px;z-index:20;font-size:.66rem;color:#6d8581;opacity:.28;text-decoration:none;letter-spacing:.02em;transition:opacity .18s ease}.template-link:hover,.template-link:focus{opacity:.9;color:#5eead4}@media(max-width:700px){.template-link{right:8px;bottom:7px;font-size:.62rem;opacity:.22}}
   </style>
   <link rel="stylesheet" href="./assets/site-ui.css">
@@ -38,31 +43,64 @@
     <div class="sub">One home for our trips. Pick a destination to open the full day-by-day itinerary.</div>
   </header>
   <main class="wrap">
-    <div class="section-head"><h2>Trips</h2><div class="count">3 itineraries</div></div>
-    <div class="grid">
-      <a class="trip" href="./beijing-2026/" aria-label="Open Beijing 2026 itinerary">
-        <div class="trip-top"><div><div class="place">Beijing 北京</div><div class="dates">20–24 September 2026</div></div><div class="year">2026</div></div>
-        <div class="desc">Forbidden City, Temple of Heaven, Beijing Wildlife Park and Universal Studios Beijing.</div>
-        <div class="meta"><span class="pill">5 days</span><span class="pill">NUO Hotel Beijing</span><span class="pill">China</span></div>
-        <div class="open"><span>Open itinerary</span><span class="arrow">→</span></div>
-      </a>
-      <a class="trip" href="./xiamen-2027/" aria-label="Open Xiamen 2027 itinerary">
-        <div class="trip-top"><div><div class="place">Xiamen 厦门</div><div class="dates">3–9 March 2027</div></div><div class="year">2027</div></div>
-        <div class="desc">A 7-day family trip to Xiamen with confirmed Singapore Airlines flights; hotel and daily activities are pending.</div>
-        <div class="meta"><span class="pill">7 days</span><span class="pill">Hotel TBD</span><span class="pill">China</span></div>
-        <div class="open"><span>Open itinerary</span><span class="arrow">→</span></div>
-      </a>
+    <section class="trip-section" aria-labelledby="upcoming-heading">
+      <div class="section-head"><h2 id="upcoming-heading">Upcoming Trips</h2><div class="count" id="upcoming-count">3 itineraries</div></div>
+      <div class="grid" id="upcoming-trips">
+        <a class="trip" data-start="2027-01-16" data-end="2027-01-25" href="./taiwan-2027/" aria-label="Open Taiwan 2027 itinerary">
+          <div class="trip-top"><div><div class="place">Taiwan 台灣</div><div class="dates">16–25 January 2027</div></div><div class="year">2027</div></div>
+          <div class="desc">Two groups meet in Tainan, followed by Miaoli glamping, Taipei and Yilan. The detailed day plan is still being filled in.</div>
+          <div class="meta"><span class="pill">10 days</span><span class="pill">Tainan · Taipei · Yilan</span><span class="pill">Taiwan</span></div>
+          <div class="open"><span>Open itinerary</span><span class="arrow">→</span></div>
+        </a>
+        <a class="trip" data-start="2027-03-03" data-end="2027-03-09" href="./xiamen-2027/" aria-label="Open Xiamen 2027 itinerary">
+          <div class="trip-top"><div><div class="place">Xiamen 厦门</div><div class="dates">3–9 March 2027</div></div><div class="year">2027</div></div>
+          <div class="desc">A 7-day family trip to Xiamen with confirmed Singapore Airlines flights; hotel and daily activities are pending.</div>
+          <div class="meta"><span class="pill">7 days</span><span class="pill">Hotel TBD</span><span class="pill">China</span></div>
+          <div class="open"><span>Open itinerary</span><span class="arrow">→</span></div>
+        </a>
+        <a class="trip" data-start="2026-09-20" data-end="2026-09-24" href="./beijing-2026/" aria-label="Open Beijing 2026 itinerary">
+          <div class="trip-top"><div><div class="place">Beijing 北京</div><div class="dates">20–24 September 2026</div></div><div class="year">2026</div></div>
+          <div class="desc">Forbidden City, Temple of Heaven, Beijing Wildlife Park and Universal Studios Beijing.</div>
+          <div class="meta"><span class="pill">5 days</span><span class="pill">NUO Hotel Beijing</span><span class="pill">China</span></div>
+          <div class="open"><span>Open itinerary</span><span class="arrow">→</span></div>
+        </a>
+      </div>
+    </section>
 
-      <a class="trip" href="./taiwan-2027/" aria-label="Open Taiwan 2027 itinerary">
-        <div class="trip-top"><div><div class="place">Taiwan 台灣</div><div class="dates">16–25 January 2027</div></div><div class="year">2027</div></div>
-        <div class="desc">Two groups meet in Tainan, followed by Miaoli glamping, Taipei and Yilan. The detailed day plan is still being filled in.</div>
-        <div class="meta"><span class="pill">10 days</span><span class="pill">Tainan · Taipei · Yilan</span><span class="pill">Taiwan</span></div>
-        <div class="open"><span>Open itinerary</span><span class="arrow">→</span></div>
-      </a>
-    </div>
+    <details class="past-trips" id="past-trips">
+      <summary><span class="past-label">Past Trips <span class="past-count" id="past-count"></span></span></summary>
+      <div class="grid" id="past-trips-grid"></div>
+    </details>
   </main>
   <footer><div class="wrap">Fremen & Jolene · Travel Itineraries</div></footer>
   <a class="template-link" href="./template/" aria-label="Open itinerary base template">Template</a>
+  <script>
+    (() => {
+      const upcomingGrid=document.getElementById('upcoming-trips');
+      const pastGrid=document.getElementById('past-trips-grid');
+      const pastDetails=document.getElementById('past-trips');
+      const upcomingCount=document.getElementById('upcoming-count');
+      const pastCount=document.getElementById('past-count');
+      const trips=[...document.querySelectorAll('.trip[data-start][data-end]')];
+      const today=new Date();
+      today.setHours(0,0,0,0);
+      const parseDate=value=>new Date(value+'T00:00:00');
+      const upcoming=trips.filter(t=>parseDate(t.dataset.end)>=today).sort((a,b)=>parseDate(a.dataset.start)-parseDate(b.dataset.start));
+      const past=trips.filter(t=>parseDate(t.dataset.end)<today).sort((a,b)=>parseDate(b.dataset.end)-parseDate(a.dataset.end));
+
+      trips.forEach(t=>t.classList.remove('next-trip'));
+      upcoming.forEach((t,i)=>{if(i===0)t.classList.add('next-trip');upcomingGrid.appendChild(t)});
+      past.forEach(t=>pastGrid.appendChild(t));
+
+      upcomingCount.textContent=upcoming.length+' '+(upcoming.length===1?'itinerary':'itineraries');
+      pastCount.textContent=past.length+' '+(past.length===1?'trip':'trips');
+      pastDetails.hidden=past.length===0;
+
+      if(upcoming.length===0){
+        document.querySelector('.trip-section').hidden=true;
+      }
+    })();
+  </script>
   <script src="./assets/site-ui.js"></script>
 </body>
 </html>
