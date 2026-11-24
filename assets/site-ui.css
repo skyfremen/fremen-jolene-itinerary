@@ -4,3 +4,16 @@
 .scroll-top.is-visible{opacity:1;visibility:visible;transform:translateY(0)}
 @media(max-width:760px){.site-version{top:8px;right:8px;min-height:23px;padding:4px 7px;font-size:.62rem}.scroll-top{right:14px;bottom:calc(160px + env(safe-area-inset-bottom));width:42px;height:42px}}
 @media print{.site-version,.scroll-top{display:none!important}}
+
+/* Shared itinerary design standard: rounded rectangles instead of pill-shaped labels.
+   Applies to all trips, the homepage and future pages using site-ui.css.
+   Circular floating actions and the existing card shapes are intentionally unchanged. */
+.pill,
+.date-chip,
+.tag,
+.navin a,
+.back-home,
+.time,
+.site-version {
+  border-radius: 10px;
+}
