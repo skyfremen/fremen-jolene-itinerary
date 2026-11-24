@@ -45,6 +45,7 @@
     .activity-sheet{position:relative;width:min(700px,100%);max-height:min(88dvh,900px);min-height:260px;display:flex;flex-direction:column;overflow:hidden;border:1px solid #3a4650;border-bottom:0;border-radius:24px 24px 0 0;background:#181d25;color:var(--ink);box-shadow:0 -14px 60px rgba(0,0,0,.5);transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
     .activity-modal.is-open .activity-backdrop{opacity:1}.activity-modal.is-open .activity-sheet{transform:translateY(0)}
     .activity-grab{width:42px;height:5px;border-radius:999px;background:#616a77;margin:10px auto 0;flex:none}
+    .activity-grab,.activity-sheet-header{touch-action:none;-webkit-user-select:none;user-select:none}
     .activity-sheet-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 20px 17px;border-bottom:1px solid #343c47;flex:none}
     .activity-sheet-header h2{font-size:1.25rem;letter-spacing:-.025em;margin:0}
     .activity-sheet-header p{font-size:.82rem;color:var(--muted);margin:4px 0 0}
@@ -261,20 +262,90 @@
       const openButton=document.getElementById('chill-activity-open');
       const closeButton=modal.querySelector('.activity-close');
       const panel=modal.querySelector('.activity-sheet');
+      const header=modal.querySelector('.activity-sheet-header');
+      const scroll=modal.querySelector('.activity-sheet-scroll');
+      const backdrop=modal.querySelector('.activity-backdrop');
       let focusReturn=null;
+      let hideTimer=null;
+      let gesture=null;
+
+      const clearDrag=()=>{
+        panel.style.transition='';
+        panel.style.transform='';
+        backdrop.style.transition='';
+        backdrop.style.opacity='';
+        gesture=null;
+      };
       const show=()=>{
+        if(hideTimer!==null){clearTimeout(hideTimer);hideTimer=null;}
+        clearDrag();
         focusReturn=document.activeElement;
         modal.hidden=false;
         document.body.classList.add('activity-sheet-open');
         requestAnimationFrame(()=>{modal.classList.add('is-open');closeButton.focus();});
       };
       const hide=()=>{
+        if(modal.hidden || !modal.classList.contains('is-open'))return;
+        clearDrag();
         modal.classList.remove('is-open');
         document.body.classList.remove('activity-sheet-open');
-        setTimeout(()=>{
-          if(!modal.classList.contains('is-open')){modal.hidden=true;focusReturn?.focus();}
+        const target=focusReturn;
+        hideTimer=setTimeout(()=>{
+          if(!modal.classList.contains('is-open')){
+            modal.hidden=true;
+            target?.focus();
+          }
+          hideTimer=null;
         },300);
       };
+
+      // Drag the handle/header down to dismiss. In the schedule list, a
+      // downward swipe dismisses only when already scrolled to the top.
+      panel.addEventListener('touchstart',event=>{
+        if(modal.hidden || !modal.classList.contains('is-open') || event.touches.length!==1)return;
+        const target=event.target;
+        if(target.closest('.activity-close'))return;
+        const fromHeader=header.contains(target) || target.classList.contains('activity-grab');
+        const fromList=scroll.contains(target);
+        if(!fromHeader && !fromList)return;
+        if(fromList && scroll.scrollTop>1)return;
+        const finger=event.touches[0];
+        gesture={id:finger.identifier,startY:finger.clientY,startAt:performance.now(),distance:0,active:false,fromList};
+      },{passive:true});
+
+      panel.addEventListener('touchmove',event=>{
+        if(!gesture)return;
+        const finger=[...event.touches].find(t=>t.identifier===gesture.id);
+        if(!finger || event.touches.length!==1){clearDrag();return;}
+        const distance=finger.clientY-gesture.startY;
+        if(!gesture.active){
+          if(distance<=8 || (gesture.fromList && scroll.scrollTop>1))return;
+          gesture.active=true;
+          panel.style.transition='none';
+          backdrop.style.transition='none';
+        }
+        // Once dragging, prevent iOS Safari from moving the page or list.
+        event.preventDefault();
+        gesture.distance=Math.max(0,distance);
+        panel.style.transform='translateY('+gesture.distance+'px)';
+        backdrop.style.opacity=String(Math.max(0.15,1-gesture.distance/(panel.clientHeight*0.65)));
+      },{passive:false});
+
+      const finishSwipe=event=>{
+        if(!gesture)return;
+        const finger=[...event.changedTouches].find(t=>t.identifier===gesture.id);
+        if(!finger)return;
+        const distance=gesture.distance;
+        const velocity=distance/Math.max(1,performance.now()-gesture.startAt);
+        const dismiss=gesture.active && (distance>110 || (distance>60 && velocity>0.55));
+        // Flush the dragging position before restoring the CSS transition.
+        if(gesture.active)void panel.offsetHeight;
+        clearDrag();
+        if(dismiss)hide();
+      };
+      panel.addEventListener('touchend',finishSwipe,{passive:true});
+      panel.addEventListener('touchcancel',()=>clearDrag(),{passive:true});
+
       openButton.addEventListener('click',show);
       modal.querySelectorAll('[data-activity-close]').forEach(control=>control.addEventListener('click',hide));
       document.addEventListener('keydown',event=>{
