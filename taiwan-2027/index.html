@@ -32,6 +32,31 @@
     .back-home:hover,.back-home:focus{background:#173b37;border-color:#2f7068;color:#5eead4;transform:translateY(-1px)}
     @media(max-width:760px){.back-row{margin-bottom:8px}.back-home{padding:7px 9px;font-size:.72rem}}
     @media print{.back-row{display:none}}
+
+    /* Glamping activity timetable: compact links and mobile-friendly slide-up sheet */
+    .activity-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+    .activity-action{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 11px;border:1px solid #32665f;border-radius:11px;background:#15312e;color:#83e9d8;text-decoration:none;font:inherit;font-size:.82rem;font-weight:800;line-height:1.3;cursor:pointer;text-align:center;transition:background .18s ease,border-color .18s ease}
+    .activity-action:hover,.activity-action:focus-visible{background:#1d4440;border-color:#53bdac}
+    body.activity-sheet-open{overflow:hidden}
+    .activity-modal[hidden]{display:none}
+    .activity-modal{position:fixed;inset:0;z-index:300;display:flex;align-items:flex-end;justify-content:center}
+    .activity-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.72);opacity:0;transition:opacity .28s ease}
+    .activity-sheet{position:relative;width:min(700px,100%);max-height:min(88dvh,900px);min-height:260px;display:flex;flex-direction:column;overflow:hidden;border:1px solid #3a4650;border-bottom:0;border-radius:24px 24px 0 0;background:#181d25;color:var(--ink);box-shadow:0 -14px 60px rgba(0,0,0,.5);transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+    .activity-modal.is-open .activity-backdrop{opacity:1}.activity-modal.is-open .activity-sheet{transform:translateY(0)}
+    .activity-grab{width:42px;height:5px;border-radius:999px;background:#616a77;margin:10px auto 0;flex:none}
+    .activity-sheet-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 20px 17px;border-bottom:1px solid #343c47;flex:none}
+    .activity-sheet-header h2{font-size:1.25rem;letter-spacing:-.025em;margin:0}
+    .activity-sheet-header p{font-size:.82rem;color:var(--muted);margin:4px 0 0}
+    .activity-close{display:grid;place-items:center;border:1px solid #46515f;border-radius:999px;width:36px;height:36px;background:#2a303b;color:#f4f5f7;font:inherit;font-size:1.4rem;line-height:1;cursor:pointer;flex:none}
+    .activity-close:focus-visible,.activity-action:focus-visible{outline:2px solid #5eead4;outline-offset:2px}
+    .activity-sheet-scroll{overflow-y:auto;overscroll-behavior:contain;flex:1;padding:6px 20px max(26px,env(safe-area-inset-bottom))}
+    .activity-group-title{color:#5eead4;font-weight:850;font-size:.96rem;margin:19px 0 9px}
+    .activity-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start;padding:9px 0;border-bottom:1px solid #303740;font-size:.89rem}
+    .activity-row .activity-hours{text-align:right;font-weight:740;font-variant-numeric:tabular-nums;max-width:250px}
+    .activity-row small{display:block;color:var(--muted);font-size:.75rem;margin-top:2px}
+    @media(max-width:760px){.activity-action{width:100%;justify-content:flex-start}.activity-sheet{max-height:92dvh}.activity-sheet-header{padding:12px 16px 14px}.activity-sheet-scroll{padding:6px 16px max(30px,env(safe-area-inset-bottom))}.activity-row{font-size:.81rem}.activity-row .activity-hours{max-width:145px}}
+    @media(prefers-reduced-motion:reduce){.activity-backdrop,.activity-sheet{transition:none}}
+    @media print{.activity-actions,.activity-modal{display:none!important}}
   
 </style>
   <link rel="stylesheet" href="../assets/print.css" media="print">
@@ -76,8 +101,11 @@
 <article class="event"><div class="time">8:30 AM</div><div class="event-card"><h3>Breakfast · 王氏魚皮 (Wang Shi Fish Skin) · Tuesday-open alternative</h3><div class="loc">台南市安平區安平路612號 · <a href="https://michelinstar.twtainan.net.haoyumarketing.com/tainan_map/%E7%8E%8B%E6%B0%8F%E9%AD%9A%E7%9A%AE/" target="_blank" rel="noopener noreferrer">Shop information ↗</a></div><div class="meta"><span class="tag">Suggested · Tuesday 4:00 AM–2:00 PM</span></div><div class="note">Try traditional milkfish fish-skin soup or savoury congee before checking out.</div></div></article>
 <article class="event"><div class="time">10:00 AM</div><div class="event-card"><h3>Return to accommodation · Pack and check out</h3><div class="loc">四季春風 · Tainan</div><div class="note">Collect luggage, finish packing and prepare the children for the onward transfer. Aim to finish check-out by 11:00 AM.</div></div></article>
 <article class="event"><div class="time">11:00 AM</div><div class="event-card"><h3>Private driver · Depart Tainan for glamping</h3><div class="loc">四季春風 · Tainan → 山 Chill 豪華露營 · Miaoli</div><div class="meta"><span class="tag book">✓ Private transfer booked</span><span class="tag ride">Approx. 2.5 hrs</span></div><div class="note">TWD 4,500 quoted for the booked transfer; child seat confirmed. 11:00 AM is a proposed departure time to coordinate with the driver, not an independently confirmed pickup time.</div></div></article>
-<article class="event"><div class="time">Check-in</div><div class="event-card"><h3>山 Chill 豪華露營</h3><div class="loc">Miaoli · 19–20 Jan 2027</div><div class="meta"><span class="tag book">✓ Confirmed</span><span class="tag">1 night</span></div><div class="note">星穹圓頂帳 · 4-adult stay · all-you-can-eat package. Baby cot rental is also booked.</div></div></article></div></section>
-<section class="day" id="day5"><div class="day-head"><div><div class="day-index">Day 05</div><h2>Glamping → Taipei</h2><div class="theme">Booked Airbnb in Datong District · 2 nights</div></div><div class="date-chip">Wednesday · 20 Jan 2027</div></div><div class="timeline"><article class="event"><div class="time">Morning</div><div class="event-card"><h3>Glamping check-out</h3><div class="loc">山 Chill 豪華露營</div><div class="note">Check-out time to be confirmed.</div></div></article><article class="event"><div class="time">TBD</div><div class="event-card"><h3>Travel to Taipei</h3><div class="loc">Miaoli → Taipei</div><div class="meta"><span class="tag ride">Transport TBD</span></div><div class="note">Mode of transport and timing are still placeholders.</div></div></article><article class="event"><div class="time">12:30 PM</div><div class="event-card"><h3>Drop off luggage · Taipei Airbnb</h3><div class="loc">太原路 (Taiyuan Road) · Datong District, Taipei 103</div><div class="meta"><span class="tag ride">Luggage drop-off available</span></div><div class="note">Leave luggage at the Airbnb before the 4:00 PM check-in.</div></div></article><article class="event"><div class="time">4:00 PM</div><div class="event-card"><h3>Check in · Taipei Airbnb · Home in Datong District</h3><div class="loc">太原路 (Taiyuan Road) · Datong District, Taipei 103</div><div class="meta"><span class="tag book">✓ Booked · 20–22 Jan</span><span class="tag">2 nights</span><span class="tag">2 bedrooms · 2 bathrooms</span><span class="tag ride">12:30 PM · Luggage drop-off available</span></div><div class="note">Remarks: Luggage can be dropped off from 12:30 PM, before the 4:00 PM check-in. Hosted by Kerry Chen. Self check-in via smart lock; detailed entry instructions become available approximately 48 hours before check-in. Near Ningxia Night Market and Zhongshan MRT (about 5 minutes according to the listing). Reservation includes 4 adults, 1 child and 1 infant.</div></div></article><article class="event"><div class="time">TBD</div><div class="event-card"><h3>Shopping · Far Eastern Garden City · Taipei Dome Branch</h3><div class="loc">遠東 Garden City · Taipei Dome, Taipei</div><div class="meta"><span class="tag">Planned · time TBD</span></div><div class="note">光之花園（影城棟）: Adidas Originals 1F. 莫內花園（時尚棟）: Sugar and Spice B2, Adidas B1, New Balance B1, Nike B1, Aape 4F, Adidas Kids 5F.</div></div></article><article class="event"><div class="time">TBD</div><div class="event-card"><h3>Taipei shopping · Stayreal, Ann’s Shoes &amp; Air Space</h3><div class="loc">Taipei · Exact store branches / order TBD</div><div class="meta"><span class="tag">Planned · time TBD</span></div><div class="note">Shopping wishlist. Store locations and visit times are not yet confirmed.</div></div></article><article class="event"><div class="time">5:00 PM</div><div class="event-card"><h3>Confirmed dinner · 如嬌 花膠雞·鍋物 民權一店</h3><div class="loc"><a href="https://www.google.com/maps/search/?api=1&amp;query=%E5%8F%B0%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8D%80%E6%B0%91%E6%AC%8A%E6%9D%B1%E8%B7%AF%E4%B8%89%E6%AE%B560%E5%B7%B79%E8%99%9F1%E6%A8%93" target="_blank" rel="noopener noreferrer">台北市中山區民權東路三段60巷9號1樓 · Google Maps ↗</a></div><div class="meta"><span class="tag book">✓ Reservation confirmed · 20 Jan 2027</span><span class="tag">4 adults · 2 children</span><span class="tag">Under Avril Tan</span></div><div class="note">Tel: 02-2509-4588. Reservation confirmation received via inline.app. Airbnb check-in is at 4:00 PM, so allow sufficient time to reach the restaurant.</div></div></article></div></section>
+<article class="event"><div class="time">3:00 PM</div><div class="event-card"><h3>Check-in · 山 Chill 豪華露營</h3><div class="loc">Miaoli · 19–20 Jan 2027</div><div class="meta"><span class="tag book">✓ Confirmed</span><span class="tag">1 night</span></div><div class="note">星穹圓頂帳 · 4-adult stay · all-you-can-eat package. Baby cot rental is also booked.</div><div class="activity-actions">
+  <a class="activity-action" href="assets/shan-chill-activity-schedule.jpg" target="_blank" rel="noopener noreferrer" aria-label="View original timetable image in a new tab"><span aria-hidden="true">▧</span> View original timetable <span aria-hidden="true">↗</span></a>
+  <button class="activity-action" type="button" id="chill-activity-open" aria-haspopup="dialog" aria-controls="chill-activity-modal"><span aria-hidden="true">▤</span> View activity schedule <span aria-hidden="true">↑</span></button>
+</div></div></article></div></section>
+<section class="day" id="day5"><div class="day-head"><div><div class="day-index">Day 05</div><h2>Glamping → Taipei</h2><div class="theme">Booked Airbnb in Datong District · 2 nights</div></div><div class="date-chip">Wednesday · 20 Jan 2027</div></div><div class="timeline"><article class="event"><div class="time">8:30 AM</div><div class="event-card"><h3>Breakfast · 山 Chill 豪華露營</h3><div class="loc">Miaoli · Glamping campsite</div><div class="note">Breakfast served from 8:30 AM to 10:00 AM.</div></div></article><article class="event"><div class="time">11:00 AM</div><div class="event-card"><h3>Glamping check-out</h3><div class="loc">山 Chill 豪華露營</div><div class="note">Room check-out by 11:00 AM. Leave the campsite by 12:00 PM.</div></div></article><article class="event"><div class="time">TBD</div><div class="event-card"><h3>Travel to Taipei</h3><div class="loc">Miaoli → Taipei</div><div class="meta"><span class="tag ride">Transport TBD</span></div><div class="note">Mode of transport and timing are still placeholders.</div></div></article><article class="event"><div class="time">12:30 PM</div><div class="event-card"><h3>Drop off luggage · Taipei Airbnb</h3><div class="loc">太原路 (Taiyuan Road) · Datong District, Taipei 103</div><div class="meta"><span class="tag ride">Luggage drop-off available</span></div><div class="note">Leave luggage at the Airbnb before the 4:00 PM check-in.</div></div></article><article class="event"><div class="time">4:00 PM</div><div class="event-card"><h3>Check in · Taipei Airbnb · Home in Datong District</h3><div class="loc">太原路 (Taiyuan Road) · Datong District, Taipei 103</div><div class="meta"><span class="tag book">✓ Booked · 20–22 Jan</span><span class="tag">2 nights</span><span class="tag">2 bedrooms · 2 bathrooms</span><span class="tag ride">12:30 PM · Luggage drop-off available</span></div><div class="note">Remarks: Luggage can be dropped off from 12:30 PM, before the 4:00 PM check-in. Hosted by Kerry Chen. Self check-in via smart lock; detailed entry instructions become available approximately 48 hours before check-in. Near Ningxia Night Market and Zhongshan MRT (about 5 minutes according to the listing). Reservation includes 4 adults, 1 child and 1 infant.</div></div></article><article class="event"><div class="time">TBD</div><div class="event-card"><h3>Shopping · Far Eastern Garden City · Taipei Dome Branch</h3><div class="loc">遠東 Garden City · Taipei Dome, Taipei</div><div class="meta"><span class="tag">Planned · time TBD</span></div><div class="note">光之花園（影城棟）: Adidas Originals 1F. 莫內花園（時尚棟）: Sugar and Spice B2, Adidas B1, New Balance B1, Nike B1, Aape 4F, Adidas Kids 5F.</div></div></article><article class="event"><div class="time">TBD</div><div class="event-card"><h3>Taipei shopping · Stayreal, Ann’s Shoes &amp; Air Space</h3><div class="loc">Taipei · Exact store branches / order TBD</div><div class="meta"><span class="tag">Planned · time TBD</span></div><div class="note">Shopping wishlist. Store locations and visit times are not yet confirmed.</div></div></article><article class="event"><div class="time">5:00 PM</div><div class="event-card"><h3>Confirmed dinner · 如嬌 花膠雞·鍋物 民權一店</h3><div class="loc"><a href="https://www.google.com/maps/search/?api=1&amp;query=%E5%8F%B0%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8D%80%E6%B0%91%E6%AC%8A%E6%9D%B1%E8%B7%AF%E4%B8%89%E6%AE%B560%E5%B7%B79%E8%99%9F1%E6%A8%93" target="_blank" rel="noopener noreferrer">台北市中山區民權東路三段60巷9號1樓 · Google Maps ↗</a></div><div class="meta"><span class="tag book">✓ Reservation confirmed · 20 Jan 2027</span><span class="tag">4 adults · 2 children</span><span class="tag">Under Avril Tan</span></div><div class="note">Tel: 02-2509-4588. Reservation confirmation received via inline.app. Airbnb check-in is at 4:00 PM, so allow sufficient time to reach the restaurant.</div></div></article></div></section>
 <section class="day" id="day6"><div class="day-head"><div><div class="day-index">Day 06</div><h2>Taipei</h2><div class="theme">Open planning day</div></div><div class="date-chip">Thursday · 21 Jan 2027</div></div><div class="timeline"><article class="event"><div class="time">12:00 PM</div><div class="event-card"><h3>Lisa Hair · 12:00 PM appointment</h3><div class="loc">Taipei</div><div class="note">Hair appointment at 12:00 PM. Salon address and booking status not specified; other sightseeing, meals and transport remain TBD.</div></div></article></div></section>
 <section class="day" id="day7"><div class="day-head"><div><div class="day-index">Day 07</div><h2>Taipei → Jiaoxi, Yilan</h2><div class="theme">Confirmed 1-night hot-spring hotel booking</div></div><div class="date-chip">Friday · 22 Jan 2027</div></div><div class="timeline">
 <article class="event"><div class="time">12:00 PM</div><div class="event-card"><h3>Check out · Taipei Airbnb · Home in Datong District</h3><div class="loc">太原路 (Taiyuan Road) · Datong District, Taipei 103</div><div class="meta"><span class="tag book">✓ Booked stay ends 22 Jan</span></div><div class="note">Airbnb checkout deadline is 12:00 noon. Allow time to pack before the booked private transfer to Jiaoxi, Yilan. Driver pickup time is still to be confirmed.</div></div></article>
@@ -160,7 +188,7 @@
     <div class="cards">
       <div class="info-card"><h3>Kaohsiung · Airline Inn - Kaohsiung Station</h3><p><strong>Group:</strong> Jolene group</p><p><strong>Stay:</strong> 16–17 Jan 2027 · 1 night</p><p><strong>Room:</strong> Elite double</p><p><strong>Address:</strong> No. 33, Jianguo 3rd Rd., Sanmin District, Kaohsiung 80750</p><p><strong>Booking ID:</strong> 2054175656</p></div>
       <div class="info-card"><h3>Tainan · 四季春風</h3><p><strong>Stay:</strong> 16–19 Jan 2027 · 3 nights</p><p><strong>Status:</strong> ✓ Booked · paid in full</p><p><strong>Guests:</strong> 4 adults · 1 child · 1 infant</p><p><strong>Total:</strong> TWD 24,100 · outstanding TWD 0</p><p>Avril group can arrive on 16 Jan; Jolene group joins on 17 Jan after the Kaohsiung overnight. Follow the booking confirmation email for check-in details.</p></div>
-      <div class="info-card"><h3>山 Chill 豪華露營 · Miaoli</h3><p><strong>Stay:</strong> 19–20 Jan 2027 · 1 night</p><p><strong>Booking:</strong> OBE63780577226080505</p><p><strong>Room:</strong> 星穹圓頂帳</p><p><strong>Package:</strong> 4 adults · all-you-can-eat plan</p><p><strong>Add-on:</strong> Baby cot rental</p></div>
+      <div class="info-card"><h3>山 Chill 豪華露營 · Miaoli</h3><p><strong>Stay:</strong> 19–20 Jan 2027 · 1 night</p><p><strong>Check-in:</strong> 19 Jan · 3:00 PM</p><p><strong>Check-out:</strong> 20 Jan · 11:00 AM (leave campsite by 12:00 PM)</p><p><strong>Booking:</strong> OBE63780577226080505</p><p><strong>Room:</strong> 星穹圓頂帳</p><p><strong>Package:</strong> 4 adults · all-you-can-eat plan</p><p><strong>Add-on:</strong> Baby cot rental</p></div>
       <div class="info-card"><h3>Taipei · Airbnb · Home in Datong District</h3><p><strong>Stay:</strong> 20–22 Jan 2027 · 2 nights</p><p><strong>Status:</strong> ✓ Booked</p><p><strong>Check-in:</strong> 20 Jan · 4:00 PM</p><p><strong>Check-out:</strong> 22 Jan · 12:00 PM</p><p><strong>Host:</strong> Kerry Chen</p><p><strong>Location:</strong> 太原路 (Taiyuan Road), Datong District, Taipei 103 · near Ningxia Night Market and Zhongshan MRT</p><p><strong>Unit:</strong> 2 bedrooms · 2 bathrooms · smart lock entry</p><p><strong>Entry instructions:</strong> Available around 48 hours before check-in</p><p><strong>Guests on reservation:</strong> 4 adults · 1 child · 1 infant</p></div>
       <div class="info-card"><h3>Jiaoxi, Yilan · 川湯春天溫泉酒店旗艦館</h3><p><strong>Stay:</strong> 22–23 Jan 2027 · 1 night</p><p><strong>Status:</strong> ✓ Booked</p><p><strong>Room:</strong> 童樂主題客房 · 2 large beds</p><p><strong>Breakfast:</strong> 4 guests</p><p><strong>Listed room price:</strong> NT$9,720</p><p><strong>Address:</strong> 宜蘭縣礁溪鄉中山路二段218號</p><p><strong>Phone:</strong> 03-988-9666</p><p><strong>Note:</strong> Please confirm Skyler and infant occupancy/cot requirements directly with the hotel.</p></div>
       <div class="info-card"><h3>Yilan · Luodong Sommer 19 Private B&amp;B</h3><p><strong>Stay:</strong> 23–25 Jan 2027 · 2 nights</p><p><strong>Status:</strong> ✓ Booked · Hosted by Jade</p><p><strong>Check-in:</strong> 23 Jan · 3:00 PM</p><p><strong>Check-out:</strong> 25 Jan · 11:00 AM</p><p><strong>Rooms:</strong> 2 rooms · 4 adults, 1 child, 1 infant</p><p><strong>Address:</strong> No. 19, Lane 87, Section 1, Zhongshan Road, Luodong Township, Yilan County 265, Taiwan</p></div>
@@ -179,6 +207,41 @@
     </div>
   </section>
 </main>
+
+<div class="activity-modal" id="chill-activity-modal" hidden>
+  <div class="activity-backdrop" data-activity-close aria-hidden="true"></div>
+  <section class="activity-sheet" role="dialog" aria-modal="true" aria-labelledby="chill-activity-title" aria-describedby="chill-activity-subtitle" tabindex="-1">
+    <div class="activity-grab" aria-hidden="true"></div>
+    <div class="activity-sheet-header">
+      <div><h2 id="chill-activity-title">Activity schedule</h2><p id="chill-activity-subtitle">山 Chill 豪華露營 · 19–20 Jan 2027</p></div>
+      <button type="button" class="activity-close" data-activity-close aria-label="Close activity schedule">×</button>
+    </div>
+    <div class="activity-sheet-scroll">
+      <div class="activity-group-title">🌿 Afternoon · 19 Jan</div>
+      <div class="activity-row"><span>Afternoon tea</span><span class="activity-hours">3:00–4:30 PM</span></div>
+      <div class="activity-row"><span>DIY craft workshop</span><span class="activity-hours">4:00 or 4:30 PM</span></div>
+      <div class="activity-row"><span>Kids' bubble play<small>Outdoor lawn</small></span><span class="activity-hours">4:00–6:00 PM</span></div>
+      <div class="activity-row"><span>Archery</span><span class="activity-hours">10:30 AM–12:00 PM<br>4:30–6:00 PM</span></div>
+      <div class="activity-row"><span>Basketball nine-grid</span><span class="activity-hours">All day</span></div>
+      <div class="activity-row"><span>Pool table</span><span class="activity-hours">3:00–11:00 PM</span></div>
+      <div class="activity-row"><span>Bouncy trampoline</span><span class="activity-hours">All day</span></div>
+      <div class="activity-row"><span>Splash pool</span><span class="activity-hours">3:00–10:00 PM</span></div>
+      <div class="activity-group-title">🔥 Evening · 19 Jan</div>
+      <div class="activity-row"><span>Dinner</span><span class="activity-hours">6:30–8:30 PM</span></div>
+      <div class="activity-row"><span>Outdoor movie</span><span class="activity-hours">6:30–9:30 PM</span></div>
+      <div class="activity-row"><span>Campfire</span><span class="activity-hours">8:00–11:00 PM</span></div>
+      <div class="activity-row"><span>Sparklers</span><span class="activity-hours">8:30–9:30 PM</span></div>
+      <div class="activity-row"><span>Roasted marshmallows</span><span class="activity-hours">8:30–9:30 PM</span></div>
+      <div class="activity-row"><span>Chill Bar<small>Last alcoholic drink: 10:30 PM</small></span><span class="activity-hours">8:30–11:00 PM</span></div>
+      <div class="activity-row"><span>Late-night snacks</span><span class="activity-hours">9:30–10:30 PM</span></div>
+      <div class="activity-row"><span>Board games, Switch &amp; Mahjong</span><span class="activity-hours">From 8:30 PM</span></div>
+      <div class="activity-group-title">☀️ Next morning · 20 Jan</div>
+      <div class="activity-row"><span>Breakfast</span><span class="activity-hours">8:30–10:00 AM</span></div>
+      <div class="activity-row"><span>Room check-out</span><span class="activity-hours">11:00 AM</span></div>
+      <div class="activity-row"><span>Leave campsite</span><span class="activity-hours">12:00 PM</span></div>
+    </div>
+  </section>
+</div>
 <footer>Taiwan 2027 itinerary · Draft · Placeholders remain where bookings or plans are not yet confirmed</footer>
 <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
   <script>
@@ -188,6 +251,43 @@
     document.addEventListener('scroll',updateActive,{passive:true});window.addEventListener('resize',updateActive);updateActive();
   </script>
   <script src="../assets/print-fit.js"></script>
+
+  <script>
+    (() => {
+      const modal=document.getElementById('chill-activity-modal');
+      const openButton=document.getElementById('chill-activity-open');
+      const closeButton=modal.querySelector('.activity-close');
+      const panel=modal.querySelector('.activity-sheet');
+      let focusReturn=null;
+      const show=()=>{
+        focusReturn=document.activeElement;
+        modal.hidden=false;
+        document.body.classList.add('activity-sheet-open');
+        requestAnimationFrame(()=>{modal.classList.add('is-open');closeButton.focus();});
+      };
+      const hide=()=>{
+        modal.classList.remove('is-open');
+        document.body.classList.remove('activity-sheet-open');
+        setTimeout(()=>{
+          if(!modal.classList.contains('is-open')){modal.hidden=true;focusReturn?.focus();}
+        },300);
+      };
+      openButton.addEventListener('click',show);
+      modal.querySelectorAll('[data-activity-close]').forEach(control=>control.addEventListener('click',hide));
+      document.addEventListener('keydown',event=>{
+        if(modal.hidden)return;
+        if(event.key==='Escape'){event.preventDefault();hide();}
+        if(event.key==='Tab'){
+          const focusable=[...panel.querySelectorAll('button:not([disabled]),a[href]')];
+          if(!focusable.length){event.preventDefault();panel.focus();return;}
+          const first=focusable[0],last=focusable[focusable.length-1];
+          if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+          else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+        }
+      });
+    })();
+  </script>
+
   <script src="../assets/site-ui.js"></script>
 </body>
 </html>
